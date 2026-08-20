@@ -88,45 +88,182 @@
   const CLOSE_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
 
   const CSS = `
-:host{all:initial}
-.wrap{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;
-  justify-content:center;background:rgba(0, 0, 0, 0.85);backdrop-filter:blur(8px);
-  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  transition: background 0.3s, backdrop-filter 0.3s;}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+:host {
+  all: initial;
+}
+
+/* Custom premium scrollbar styling inside host */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  transition: all 0.3s ease;
+}
+
+/* Minimized State (Collapsed) */
 .wrap.collapsed {
   position: fixed;
-  inset: auto 16px auto auto;
-  top: 16px;
-  right: 16px;
-  width: 380px;
+  inset: auto 20px auto auto;
+  top: 20px;
+  right: 20px;
+  width: 320px;
   height: auto;
   background: transparent !important;
   backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
-
-.box{background:#fff;color:#000;width:min(1240px,95vw);height:min(880px,93vh);
-  border-radius:0;display:flex;flex-direction:column;overflow:hidden;
-  box-shadow:none;border:1px solid #000;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
 
 .wrap.collapsed .box {
-  width: 100%;
-  height: auto;
-  max-height: 90vh;
-  box-shadow: none;
+  width: 320px !important;
+  height: auto !important;
+  max-height: 480px !important;
+  border-radius: 12px;
 }
 
-.top{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #000;flex:none;background:#ffffff}
-.brand{font-weight:800;font-size:15px;letter-spacing:-.03em;color:#000;display:flex;align-items:center;gap:6px;text-transform:uppercase}
-.brand::before{content:"";display:inline-block;width:6px;height:6px;background:#000;border-radius:0}
-.role{color:#666;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;font-weight:500;padding-right:8px}
+/* Maximized State (Extended) */
+.wrap.extended {
+  position: fixed;
+  inset: 20px 20px 20px auto !important;
+  top: 20px !important;
+  right: 20px !important;
+  bottom: 20px !important;
+  left: auto !important;
+  width: 360px !important;
+  height: calc(100vh - 40px) !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
 
+.wrap.extended .box {
+  width: 360px !important;
+  height: calc(100vh - 40px) !important;
+  max-height: calc(100vh - 40px) !important;
+  border-radius: 12px;
+}
+
+/* Container Box */
+.box {
+  background: rgba(18, 18, 22, 0.88) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  color: #ececf1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Header (Top) */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex: none;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+}
+
+.brand::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #ff4d4d;
+  border-radius: 50%;
+}
+
+.cv-badge {
+  font-size: 9px;
+  font-weight: 700;
+  background: rgba(255, 77, 77, 0.1);
+  color: #ff4d4d;
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  border-radius: 4px;
+  padding: 2px 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.role {
+  color: #acacbe;
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* Header Buttons */
 .btn-header {
-  border: 1px solid #000;
-  background: #fff;
-  color: #000;
-  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #acacbe;
+  border-radius: 6px;
   width: 28px;
   height: 28px;
   cursor: pointer;
@@ -136,35 +273,227 @@
   transition: all 0.2s;
   flex: none;
 }
+
 .btn-header:hover {
-  background: #000;
-  color: #fff;
+  background: rgba(255, 77, 77, 0.1);
+  border-color: #ff4d4d;
+  color: #ffffff;
 }
 
-.main{display:flex;flex:1;min-height:0}
-.left{flex:1;min-width:0;background:#111;overflow:auto;padding:24px;display:flex;justify-content:center;align-items:flex-start}
-iframe{width:794px;height:1123px;border:1px solid #000;background:#fff;box-shadow:none;flex:none;border-radius:0;overflow:hidden}
-.right{width:340px;flex:none;border-left:1px solid #000;overflow:auto;padding:20px;font-size:13px;background:#ffffff;display:flex;flex-direction:column;gap:20px}
-.bot{display:flex;align-items:center;gap:12px;padding:14px 20px;border-top:1px solid #000;flex:none;background:#ffffff}
-.grow{flex:1}
-button.act{border:1px solid #000;border-radius:0;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
-.primary{background:#000;color:#fff;}
-.primary:hover{background:#fff;color:#000;}
-.ghost{background:#fff;color:#000}
-.ghost:hover{background:#000;color:#fff}
-button:disabled{opacity:.35;cursor:not-allowed;background:#ccc;color:#666;border-color:#ccc}
-.status{font-size:12.5px;color:#000;display:flex;align-items:center;gap:8px;font-weight:500}
-.spin{width:14px;height:14px;border:2px solid #ccc;border-top-color:#000;border-radius:50%;animation:s .7s linear infinite}
-@keyframes s{to{transform:rotate(360deg)}}
-h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#000;font-weight:700}
-.pill{display:inline-block;background:#ffffff;color:#000;border:1px solid #000;border-radius:0;padding:3px 8px;margin:0 4px 4px 0;font-size:11.5px;font-weight:500}
-.gap{display:inline-block;background:#f5f5f5;color:#666;border:1px solid #ccc;border-radius:0;padding:3px 8px;margin:0 4px 4px 0;font-size:11.5px;font-weight:500}
-.warn{background:#ffffff;color:#000;border-radius:0;padding:10px 12px;font-size:12px;line-height:1.45;border:1px solid #000;border-left:4px solid #000}
-.ok{background:#ffffff;color:#000;border-radius:0;padding:10px 12px;font-size:12px;border:1px solid #ccc;border-left:4px solid #ccc}
-.note{color:#666;font-size:11.5px;line-height:1.5}
-.jdbox{width:100%;height:120px;font:12px/1.45 ui-monospace,monospace;border:1px solid #000;border-radius:0;padding:10px;resize:vertical;background:#fff;box-sizing:border-box;color:#000}
-.jdbox:focus{border-color:#000;outline:none}
-.fitbad{background:#ffffff;color:#000;border-radius:0;padding:10px 12px;font-size:12px;border:1px solid #000;border-left:4px solid #000}
+/* Main Split View in Maximized/Extended State */
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.left {
+  flex: none;
+  width: 100%;
+  height: 290px;
+  background: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+iframe {
+  width: 794px;
+  height: 1123px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+  flex: none;
+  border-radius: 6px;
+  transform: scale(0.24);
+  transform-origin: center center;
+}
+
+.right {
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  font-size: 13px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Bottom Controls */
+.bot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex: none;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.grow {
+  flex: 1;
+}
+
+/* Buttons */
+button.act {
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.primary {
+  background: #ff4d4d;
+  color: #ffffff;
+  border: none;
+}
+
+.primary:hover {
+  background: #e03c3c;
+  box-shadow: 0 0 12px rgba(255, 77, 77, 0.3);
+}
+
+.ghost {
+  background: rgba(255, 255, 255, 0.03);
+  color: #ececf1;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ghost:hover {
+  background: rgba(255, 77, 77, 0.1);
+  border-color: #ff4d4d;
+  color: #ffffff;
+}
+
+button:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.status {
+  font-size: 12.5px;
+  color: #acacbe;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.spin {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #ff4d4d;
+  border-radius: 50%;
+  animation: s 0.7s linear infinite;
+}
+
+@keyframes s {
+  to { transform: rotate(360deg); }
+}
+
+h4 {
+  margin: 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Pills and Cards */
+.pill {
+  display: inline-block;
+  background: rgba(255, 77, 77, 0.05);
+  color: #ff4d4d;
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin: 0 4px 4px 0;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.gap {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.04);
+  color: #acacbe;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin: 0 4px 4px 0;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.warn {
+  background: rgba(255, 77, 77, 0.05);
+  color: #ececf1;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  border-left: 4px solid #ff4d4d;
+}
+
+.ok {
+  background: rgba(255, 255, 255, 0.04);
+  color: #ececf1;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 4px solid #ff4d4d;
+}
+
+.note {
+  color: #acacbe;
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.jdbox {
+  width: 100%;
+  height: 120px;
+  font: 12px/1.45 ui-monospace, monospace;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 10px;
+  resize: vertical;
+  background: rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  color: #ffffff;
+}
+
+.jdbox:focus {
+  border-color: #ff4d4d;
+  box-shadow: 0 0 8px rgba(255, 77, 77, 0.25);
+  outline: none;
+}
+
+.fitbad {
+  background: rgba(255, 77, 77, 0.05);
+  color: #ececf1;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  border-left: 4px solid #ff4d4d;
+}
 
 /* Input View Screen */
 .input-view {
@@ -173,16 +502,18 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   align-items: center;
   justify-content: center;
   flex: 1;
-  padding: 24px;
-  background: #ffffff;
+  padding: 16px;
+  background: transparent;
   box-sizing: border-box;
   position: relative;
+  overflow-y: auto;
 }
+
 .input-card {
-  background: #fff;
-  border: 1px solid #000;
-  border-radius: 0;
-  padding: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 16px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -190,43 +521,49 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   box-sizing: border-box;
   position: relative;
 }
+
 .input-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
-  color: #000;
+  color: #ffffff;
   margin: 0 0 6px 0;
   letter-spacing: -0.02em;
   text-align: center;
   text-transform: uppercase;
 }
+
 .input-subtitle {
-  font-size: 12.5px;
-  color: #666;
+  font-size: 12px;
+  color: #acacbe;
   margin: 0 0 16px 0;
   text-align: center;
   line-height: 1.4;
 }
+
 .jd-input {
   width: 100%;
   height: 130px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 12px;
-  border: 1px solid #000;
-  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
   padding: 10px;
   margin-bottom: 16px;
   outline: none;
   resize: none;
   transition: all 0.2s;
   box-sizing: border-box;
-  background: #ffffff;
-  color: #000;
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
   line-height: 1.4;
 }
+
 .jd-input:focus {
-  border-color: #000;
-  background: #fff;
+  border-color: #ff4d4d;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 8px rgba(255, 77, 77, 0.25);
 }
+
 .btn-row {
   display: flex;
   gap: 12px;
@@ -234,12 +571,13 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   width: 100%;
   box-sizing: border-box;
 }
+
 .gen-btn, .upload-btn {
   flex: 1;
-  background: #000;
-  color: #fff;
-  border: 1px solid #000;
-  border-radius: 0;
+  background: #ff4d4d;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
   padding: 11px 16px;
   font-size: 11px;
   font-weight: 700;
@@ -250,24 +588,27 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   letter-spacing: 0.05em;
   box-sizing: border-box;
 }
+
 .gen-btn:hover {
-  background: #fff;
-  color: #000;
+  background: #e03c3c;
+  box-shadow: 0 0 12px rgba(255, 77, 77, 0.3);
 }
-.gen-btn:active, .upload-btn:active {
-  transform: translateY(0);
-}
+
 .upload-btn {
-  background: #fff;
-  color: #000;
+  background: rgba(255, 255, 255, 0.03);
+  color: #ececf1;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 .upload-btn:hover {
-  background: #000;
-  color: #fff;
+  background: rgba(255, 77, 77, 0.1);
+  border-color: #ff4d4d;
+  color: #ffffff;
 }
+
 .gen-btn:disabled, .upload-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
 }
 
 /* Info Icon and Tooltip */
@@ -276,32 +617,36 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   align-items: center;
   gap: 5px;
   margin-top: 14px;
-  font-size: 11.5px;
-  color: #666;
+  font-size: 11px;
+  color: #acacbe;
   position: relative;
   cursor: pointer;
   user-select: none;
 }
+
 .info-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 14px;
   height: 14px;
-  border-radius: 0;
-  border: 1px solid #000;
-  background: #fff;
-  color: #000;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
   font-weight: bold;
-  font-size: 10px;
+  font-size: 9px;
 }
+
 .info-tooltip {
   visibility: hidden;
   width: 260px;
-  background: #000;
-  color: #fff;
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ececf1;
   text-align: left;
-  border-radius: 0;
+  border-radius: 6px;
   padding: 12px;
   position: absolute;
   z-index: 1000;
@@ -312,8 +657,10 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   transition: opacity 0.2s;
   font-weight: normal;
   line-height: 1.45;
-  border: 1px solid #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
+
 .info-tooltip::after {
   content: "";
   position: absolute;
@@ -322,27 +669,31 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #000 transparent transparent transparent;
+  border-color: rgba(20, 20, 20, 0.95) transparent transparent transparent;
 }
+
 .info-container:hover .info-tooltip {
   visibility: visible;
   opacity: 1;
 }
+
 .tooltip-title {
   font-weight: 700;
   margin-bottom: 6px;
-  color: #fff;
-  font-size: 12px;
+  color: #ffffff;
+  font-size: 11px;
   text-transform: uppercase;
 }
+
 .tooltip-step {
   margin: 4px 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  background: #333;
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid rgba(255, 77, 77, 0.2);
   padding: 3px 6px;
-  border-radius: 0;
-  font-size: 10.5px;
-  color: #fff;
+  border-radius: 4px;
+  font-size: 10px;
+  color: #ff4d4d;
 }
 
 /* Progress Container */
@@ -352,33 +703,39 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   flex-direction: column;
   align-items: center;
 }
+
 .progress-bar-bg {
   width: 100%;
   height: 6px;
-  background: #eee;
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
   overflow: hidden;
   margin-bottom: 12px;
   position: relative;
-  border: 1px solid #000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 .progress-bar-fill {
   width: 0%;
   height: 100%;
-  background: #000;
-  border-radius: 0;
+  background: #ff4d4d;
+  box-shadow: 0 0 8px rgba(255, 77, 77, 0.5);
+  border-radius: 4px;
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
+
 .progress-text {
   font-size: 20px;
   font-weight: 800;
-  color: #000;
+  color: #ffffff;
   margin-bottom: 6px;
 }
+
 .progress-sub {
   font-size: 12px;
-  color: #666;
+  color: #acacbe;
+  margin-bottom: 6px;
   font-weight: 500;
   text-align: center;
 }
@@ -390,39 +747,44 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   flex-direction: column;
   align-items: center;
 }
+
 .complete-icon {
   font-size: 40px;
-  color: #000;
+  color: #ff4d4d;
   margin-bottom: 10px;
   animation: scIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 @keyframes scIn {
   0% { transform: scale(0); }
   100% { transform: scale(1); }
 }
+
 .complete-text {
   font-size: 18px;
   font-weight: 800;
-  color: #000;
+  color: #ffffff;
   margin-bottom: 6px;
   text-transform: uppercase;
 }
+
 .complete-sub {
   font-size: 13px;
-  color: #666;
+  color: #acacbe;
   margin-bottom: 16px;
   text-align: center;
   line-height: 1.45;
 }
+
 .btn-group {
   display: flex;
   gap: 12px;
   width: 100%;
   justify-content: center;
 }
+
 .complete-btn {
-  border: 1px solid #000;
-  border-radius: 0;
+  border-radius: 6px;
   padding: 11px 22px;
   font-size: 13px;
   font-weight: 600;
@@ -433,21 +795,28 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   text-align: center;
   text-transform: uppercase;
 }
+
 .btn-preview {
-  background: #fff;
-  color: #000;
+  background: rgba(255, 255, 255, 0.03);
+  color: #ececf1;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 .btn-preview:hover {
-  background: #000;
-  color: #fff;
+  background: rgba(255, 77, 77, 0.1);
+  border-color: #ff4d4d;
+  color: #ffffff;
 }
+
 .btn-download {
-  background: #000;
-  color: #fff;
+  background: #ff4d4d;
+  color: #ffffff;
+  border: none;
 }
+
 .btn-download:hover {
-  background: #fff;
-  color: #000;
+  background: #e03c3c;
+  box-shadow: 0 0 12px rgba(255, 77, 77, 0.3);
 }
 
 /* Error Container */
@@ -457,74 +826,84 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   flex-direction: column;
   align-items: center;
 }
+
 .error-title {
   font-size: 16px;
   font-weight: 800;
-  color: #000;
+  color: #ff4d4d;
   margin-bottom: 6px;
   text-transform: uppercase;
 }
+
 .error-msg {
   font-size: 12px;
-  color: #000;
+  color: #ececf1;
   margin-bottom: 14px;
   text-align: center;
-  background: #fff;
-  border: 1px solid #000;
+  background: rgba(255, 77, 77, 0.05);
+  border: 1px solid rgba(255, 77, 77, 0.2);
   padding: 10px 12px;
-  border-radius: 0;
+  border-radius: 6px;
   width: 100%;
   box-sizing: border-box;
   line-height: 1.45;
 }
+
 .error-setup-info {
-  background: #fff;
-  border: 1px solid #000;
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
   padding: 12px;
   margin-bottom: 14px;
   text-align: left;
   width: 100%;
   box-sizing: border-box;
   font-size: 12px;
-  color: #000;
+  color: #ececf1;
   line-height: 1.5;
 }
+
 .error-setup-info .tooltip-step {
-  background: #000;
-  color: #fff;
+  background: rgba(255, 77, 77, 0.1);
+  color: #ff4d4d;
+  border: 1px solid rgba(255, 77, 77, 0.2);
   font-weight: 500;
   display: block;
   margin: 4px 0 8px 0;
 }
+
 .btn-back {
-  background: #fff;
-  color: #000;
-  border: 1px solid #000;
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.03);
+  color: #ececf1;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
   padding: 8px 16px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
+
 .btn-back:hover {
-  background: #000;
-  color: #fff;
+  background: rgba(255, 77, 77, 0.1);
+  border-color: #ff4d4d;
+  color: #ffffff;
 }
+
 .header-progress-bar {
   width: 100%;
   height: 2px;
-  background: #eee;
+  background: rgba(255, 255, 255, 0.05);
   overflow: hidden;
   position: relative;
   display: none;
   flex: none;
 }
+
 .header-progress-fill {
   width: 0%;
   height: 100%;
-  background: #000;
+  background: #ff4d4d;
   transition: width 0.3s ease;
 }
 
@@ -532,7 +911,9 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
 .llm-modal-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.98);
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -541,14 +922,16 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   padding: 20px;
   box-sizing: border-box;
 }
+
 .llm-modal-title {
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #000;
+  color: #ffffff;
   margin-bottom: 16px;
 }
+
 .llm-option-group {
   display: flex;
   gap: 10px;
@@ -556,11 +939,13 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   max-width: 280px;
   margin-bottom: 16px;
 }
+
 .llm-opt-btn {
   flex: 1;
-  background: #fff;
-  color: #000;
-  border: 1px solid #000;
+  background: rgba(255, 255, 255, 0.03);
+  color: #ececf1;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
   padding: 8px;
   font-size: 11px;
   font-weight: 600;
@@ -569,14 +954,19 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   text-align: center;
   text-transform: uppercase;
 }
+
 .llm-opt-btn.active {
-  background: #000;
-  color: #fff;
+  background: #ff4d4d;
+  color: #ffffff;
+  border-color: #ff4d4d;
 }
+
 .llm-opt-btn:hover {
-  background: #000;
-  color: #fff;
+  background: rgba(255, 77, 77, 0.1);
+  border-color: #ff4d4d;
+  color: #ffffff;
 }
+
 .llm-key-form {
   display: flex;
   flex-direction: column;
@@ -585,35 +975,46 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   max-width: 280px;
   margin-bottom: 20px;
 }
+
 .llm-field {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 .llm-label {
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 700;
-  color: #666;
+  color: #acacbe;
 }
+
 .llm-select, .llm-input {
   width: 100%;
-  padding: 6px 8px;
-  border: 1px solid #000;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
   font-size: 11px;
   font-family: inherit;
   box-sizing: border-box;
-  background: #fff;
-  color: #000;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
   outline: none;
+  transition: border-color 0.2s;
 }
+
+.llm-select:focus, .llm-input:focus {
+  border-color: #ff4d4d;
+}
+
 .llm-actions {
   display: flex;
   gap: 10px;
   width: 100%;
   max-width: 280px;
 }
+
 .llm-action-btn {
   flex: 1;
   padding: 8px;
@@ -623,24 +1024,30 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
   transition: all 0.2s;
   box-sizing: border-box;
   text-align: center;
-  border: 1px solid #000;
+  border-radius: 6px;
   text-transform: uppercase;
 }
+
 .llm-action-btn.primary {
-  background: #000;
-  color: #fff;
+  background: #ff4d4d;
+  color: #ffffff;
+  border: none;
 }
+
 .llm-action-btn.primary:hover {
-  background: #fff;
-  color: #000;
+  background: #e03c3c;
+  box-shadow: 0 0 12px rgba(255, 77, 77, 0.3);
 }
+
 .llm-action-btn.secondary {
-  background: #fff;
-  color: #000;
+  background: rgba(255, 255, 255, 0.03);
+  color: #ececf1;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 .llm-action-btn.secondary:hover {
-  background: #000;
-  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 `;
 
@@ -683,6 +1090,40 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
     }
   }
 
+  function checkServerHealth() {
+    chrome.runtime.sendMessage({ type: 'jw-health' }, (res) => {
+      const activeCvInfo = $('active-cv-info');
+      const cvBadge = $('cv-badge');
+      
+      if (res && res.ok && res.health) {
+        if (res.health.hasFacts && res.health.factsName) {
+          if (activeCvInfo) {
+            activeCvInfo.innerHTML = `Active CV: <strong style="color: #ff4d4d;">${res.health.factsName}</strong>`;
+          }
+          if (cvBadge) {
+            cvBadge.textContent = res.health.factsName;
+            cvBadge.title = `Active CV: ${res.health.factsName}`;
+            cvBadge.style.display = 'inline-block';
+          }
+        } else {
+          if (activeCvInfo) {
+            activeCvInfo.innerHTML = `No resume imported. Please upload a CV first.`;
+          }
+          if (cvBadge) {
+            cvBadge.style.display = 'none';
+          }
+        }
+      } else {
+        if (activeCvInfo) {
+          activeCvInfo.innerHTML = `<span style="color: #ff4d4d;">Server offline — check connection</span>`;
+        }
+        if (cvBadge) {
+          cvBadge.style.display = 'none';
+        }
+      }
+    });
+  }
+
   function toggleExtend() {
     isExtended = !isExtended;
     const wrap = root.querySelector('.wrap');
@@ -713,9 +1154,18 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
     const box = el('div', 'box');
 
     const top = el('div', 'top');
-    top.append(el('div', 'brand', 'fast-CV'));
+    const headerInfo = el('div', 'header-info');
+    
+    const brandRow = el('div', 'brand-row');
+    const brand = el('div', 'brand', 'fast-CV');
+    const cvBadge = el('span', 'cv-badge');
+    cvBadge.id = 'cv-badge';
+    cvBadge.style.display = 'none';
+    brandRow.append(brand, cvBadge);
+    
     const role = el('div', 'role', 'reading this page…');
     role.id = 'role';
+    headerInfo.append(brandRow, role);
     
     const extendBtn = el('button', 'btn-header btn-extend');
     extendBtn.id = 'extend-btn';
@@ -725,7 +1175,7 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
     const x = el('button', 'btn-header btn-close');
     x.innerHTML = CLOSE_SVG;
     x.onclick = close;
-    top.append(role, extendBtn, x);
+    top.append(headerInfo, extendBtn, x);
 
     // --- Input View ---
     const inputView = el('div', 'input-view');
@@ -734,6 +1184,15 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
     const card = el('div', 'input-card');
     card.append(el('h2', 'input-title', 'Tailor Your Resume'));
     card.append(el('p', 'input-subtitle', 'Paste the job description below to align your resume facts.'));
+
+    const activeCvInfo = el('div', 'active-cv-info');
+    activeCvInfo.id = 'active-cv-info';
+    activeCvInfo.style.fontSize = '12px';
+    activeCvInfo.style.color = '#acacbe';
+    activeCvInfo.style.marginBottom = '14px';
+    activeCvInfo.style.textAlign = 'center';
+    activeCvInfo.innerHTML = 'Checking server connection...';
+    card.append(activeCvInfo);
 
     const jdTextarea = el('textarea', 'jd-input');
     jdTextarea.id = 'jd-input-box';
@@ -801,8 +1260,10 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
               $('jd-input-box').style.display = 'block';
               $('btn-row').style.display = 'flex';
               if (infoBadge) infoBadge.style.display = 'flex';
+              if ($('active-cv-info')) $('active-cv-info').style.display = 'block';
               
               setStatus(`Resume imported: ${res.name}`, false);
+              checkServerHealth();
               
               const iframe = $('frame');
               if (iframe && iframe.src) {
@@ -907,13 +1368,13 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
     
     const errSetup = el('div', 'error-setup-info');
     errSetup.innerHTML = `
-      <div style="font-weight: 700; margin-bottom: 6px; color: #000;">To start the local fast-CV server:</div>
+      <div style="font-weight: 700; margin-bottom: 6px; color: #ffffff;">To start the local fast-CV server:</div>
       <div style="margin-bottom: 4px;">1. Run in project directory:</div>
       <div class="tooltip-step">npm run dev</div>
       <div style="margin-bottom: 4px;">2. Ensure Ollama is running:</div>
       <div class="tooltip-step">ollama serve</div>
       <div style="margin-bottom: 4px;">3. Load your resume facts:</div>
-      <a href="http://127.0.0.1:7788/setup" target="_blank" style="color: #000; font-weight: 600; text-decoration: underline;">http://127.0.0.1:7788/setup</a>
+      <a href="http://127.0.0.1:7788/setup" target="_blank" style="color: #ff4d4d; font-weight: 600; text-decoration: underline;">http://127.0.0.1:7788/setup</a>
     `;
     
     const backBtn = el('button', 'btn-back', 'Back to Edit');
@@ -922,6 +1383,7 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
       jdTextarea.style.display = 'block';
       $('btn-row').style.display = 'flex';
       infoContainer.style.display = 'flex';
+      if ($('active-cv-info')) $('active-cv-info').style.display = 'block';
     };
     
     errContainer.append(errTitle, errMsg, errSetup, backBtn);
@@ -1087,6 +1549,7 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
         jdTextarea.style.display = 'none';
         $('btn-row').style.display = 'none';
         infoContainer.style.display = 'none';
+        if ($('active-cv-info')) $('active-cv-info').style.display = 'none';
         errContainer.style.display = 'none';
         progContainer.style.display = 'flex';
         updateProgress(0, 'Initializing inference...');
@@ -1184,7 +1647,7 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
     summary.style.fontSize = '11px';
     summary.style.textTransform = 'uppercase';
     summary.style.letterSpacing = '.08em';
-    summary.style.color = '#4f46e5';
+    summary.style.color = '#ff4d4d';
     summary.style.outline = 'none';
 
     const ta = el('textarea', 'jdbox');
@@ -1210,6 +1673,7 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
       $('jd-input-box').value = ta.value;
       $('jd-input-box').style.display = 'none';
       $('btn-row').style.display = 'none';
+      if ($('active-cv-info')) $('active-cv-info').style.display = 'none';
       $('complete-container').style.display = 'none';
       $('progress-container').style.display = 'flex';
       updateProgress(0, 'Re-running inference...');
@@ -1392,22 +1856,22 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
         if (errSetup) {
           if (isGemini || llmOpts.provider) {
             errSetup.innerHTML = `
-              <div style="font-weight: 700; margin-bottom: 6px; color: #000;">To start the local fast-CV server:</div>
+              <div style="font-weight: 700; margin-bottom: 6px; color: #ffffff;">To start the local fast-CV server:</div>
               <div style="margin-bottom: 4px;">1. Run in project directory:</div>
               <div class="tooltip-step">npm run dev</div>
               <div style="margin-bottom: 4px;">2. Ensure API keys are configured correctly</div>
               <div style="margin-bottom: 4px;">3. Load your resume facts:</div>
-              <a href="http://127.0.0.1:7788/setup" target="_blank" style="color: #000; font-weight: 600; text-decoration: underline;">http://127.0.0.1:7788/setup</a>
+              <a href="http://127.0.0.1:7788/setup" target="_blank" style="color: #ff4d4d; font-weight: 600; text-decoration: underline;">http://127.0.0.1:7788/setup</a>
             `;
           } else {
             errSetup.innerHTML = `
-              <div style="font-weight: 700; margin-bottom: 6px; color: #000;">To start the local fast-CV server:</div>
+              <div style="font-weight: 700; margin-bottom: 6px; color: #ffffff;">To start the local fast-CV server:</div>
               <div style="margin-bottom: 4px;">1. Run in project directory:</div>
               <div class="tooltip-step">npm run dev</div>
               <div style="margin-bottom: 4px;">2. Ensure Ollama is running:</div>
               <div class="tooltip-step">ollama serve</div>
               <div style="margin-bottom: 4px;">3. Load your resume facts:</div>
-              <a href="http://127.0.0.1:7788/setup" target="_blank" style="color: #000; font-weight: 600; text-decoration: underline;">http://127.0.0.1:7788/setup</a>
+              <a href="http://127.0.0.1:7788/setup" target="_blank" style="color: #ff4d4d; font-weight: 600; text-decoration: underline;">http://127.0.0.1:7788/setup</a>
             `;
           }
         }
@@ -1437,6 +1901,52 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
         setStatus('ready — click any line to edit it', false);
         
         $('progress-container').style.display = 'none';
+
+        const compSub = $('complete-sub');
+        if (compSub) {
+          compSub.innerHTML = '';
+          
+          const detailsBox = el('div');
+          detailsBox.style.width = '100%';
+          detailsBox.style.textAlign = 'left';
+          detailsBox.style.marginTop = '14px';
+          detailsBox.style.marginBottom = '18px';
+          detailsBox.style.display = 'flex';
+          detailsBox.style.flexDirection = 'column';
+          detailsBox.style.gap = '8px';
+          detailsBox.style.padding = '12px';
+          detailsBox.style.background = 'rgba(255, 255, 255, 0.03)';
+          detailsBox.style.border = '1px solid rgba(255, 255, 255, 0.05)';
+          detailsBox.style.borderRadius = '6px';
+          detailsBox.style.fontSize = '12px';
+          detailsBox.style.color = '#ececf1';
+          
+          const roleTitle = ev.run.jd?.title || 'this role';
+          const roleCompany = ev.run.jd?.company ? ` at ${ev.run.jd.company}` : '';
+          const roleEl = el('div');
+          roleEl.innerHTML = `<strong>Target Role:</strong> <span style="color: #ff4d4d;">${roleTitle}${roleCompany}</span>`;
+          
+          const flaggedCount = ev.run.verification?.flagged?.length || 0;
+          const rejectedCount = ev.run.verification?.rejected?.length || 0;
+          const verificationEl = el('div');
+          if (flaggedCount === 0 && rejectedCount === 0) {
+            verificationEl.innerHTML = `<strong>Verification:</strong> <span style="color: #10b981;">✓ All facts match your CV</span>`;
+          } else {
+            verificationEl.innerHTML = `<strong>Verification:</strong> <span style="color: #ff4d4d;">⚠ ${flaggedCount + rejectedCount} issue(s) flagged</span>`;
+          }
+          
+          const gapsCount = ev.run.gaps?.length || 0;
+          const gapsEl = el('div');
+          gapsEl.innerHTML = `<strong>Missing Skills:</strong> <span style="color: #acacbe;">${gapsCount} skill(s) excluded</span>`;
+          
+          const createdTime = new Date(ev.run.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const timeEl = el('div');
+          timeEl.innerHTML = `<strong>Generated At:</strong> <span style="color: #acacbe;">${createdTime}</span>`;
+          
+          detailsBox.append(roleEl, verificationEl, gapsEl, timeEl);
+          compSub.append(detailsBox);
+        }
+
         $('complete-container').style.display = 'flex';
       }
     });
@@ -1458,6 +1968,7 @@ h4{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#
       $('jd-input-box').value = jd.text;
     }
     $('role').textContent = jd.text ? `from ${jd.how}` : 'waiting for job description';
+    checkServerHealth();
   };
 
   chrome.runtime.onMessage.addListener((msg) => {
