@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fast-CV</title>
+    <meta
+      name="description"
+      content="fast-CV re-angles the resume you already have to the job you're looking at — in your own format, on one page, without inventing anything."
+    />
+    <meta name="theme-color" content="#fafaf9" />
+    <meta property="og:title" content="fast-CV — Your resume, re-angled to the job" />
+    <meta
+      property="og:description"
+      content="Open a job, click once, get your resume tailored to it — cited, verified, one page."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='.3' cy='.25' r='.85'%3E%3Cstop offset='0' stop-color='%23e17575'/%3E%3Cstop offset='.45' stop-color='%23c84141'/%3E%3Cstop offset='.75' stop-color='%23853232'/%3E%3Cstop offset='1' stop-color='%233d1a1a'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M32 4c14 0 28 10 28 27S47 60 31 60 4 49 4 33 18 4 32 4z'/%3E%3C/svg%3E" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="index.css" />
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+  </head>
+  <body>
+    <div class="backdrop" aria-hidden="true">
+      <canvas id="lines"></canvas>
+      <div class="grid"></div>
+    </div>
+
+    <header class="nav">
+      <a class="logo" href="#top" aria-label="fast-CV home">
+        <span class="logo-mark"></span>
+        fast-CV
+      </a>
+      <nav class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#features">Guarantees</a>
+        <a href="#stack">Stack</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-small nav-github" href="https://github.com/thenameisvicky/fast-resume" target="_blank" rel="noopener">GitHub</a>
+        <button id="menuToggle" class="icon-btn menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span class="menu-lines"><span></span><span></span></span>
+        </button>
+      </div>
+    </header>
+
+    <nav id="mobileMenu" class="mobile-menu" aria-label="Mobile">
+      <a href="#how">How it works</a>
+      <a href="#features">Guarantees</a>
+      <a href="#stack">Stack</a>
+      <a href="https://github.com/thenameisvicky/fast-resume" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <h1 class="load-in" style="--d: 0ms">Your resume, <span class="accent">re&#8209;angled</span> to every job.</h1>
+          <p class="lead load-in" style="--d: 200ms">
+            Open a job posting, click once. fast&#8209;CV rewrites the resume you already
+            have to match it — in your own format, on one page, editable and ready
+            to download as a PDF. Every line is cited back to what you actually wrote.
+          </p>
+          <div class="hero-cta load-in" style="--d: 300ms">
+            <a class="btn btn-primary" href="#how">See how it works</a>
+            <a class="btn btn-ghost" href="https://github.com/thenameisvicky/fast-resume" target="_blank" rel="noopener">
+              View source
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual load-in" style="--d: 450ms">
+          <div class="job">
+            <span class="job-host" id="jobHost">jobs.example.com</span>
+            <span class="job-title" id="jobTitle">AI Engineer, Retrieval</span>
+          </div>
+
+          <article class="paper" id="paper" aria-label="Example resume being tailored">
+            <p class="paper-name">Alex Rivera</p>
+            <p class="paper-contact">alex@example.com · github.com/alexr · Bengaluru</p>
+            <span class="paper-rule">Experience</span>
+            <div class="paper-role"><span><b>Software Engineer</b>, Northwind Labs</span><em>2022 – Present</em></div>
+            <ul class="bullets" id="bullets"></ul>
+            <span class="paper-rule">Skills</span>
+            <p class="skills" id="skills"></p>
+          </article>
+
+          <div class="status-card">
+            <div class="status-head">
+              <span class="live-dot"></span>
+              <span id="demoState">Reading job post</span>
+            </div>
+            <ul class="checks" id="checks">
+              <li data-check="cited"><span>Bullets cited</span><span class="check-value">—</span></li>
+              <li data-check="unattested"><span>Unattested terms</span><span class="check-value">—</span></li>
+              <li data-check="added"><span>Skills added</span><span class="check-value">—</span></li>
+              <li data-check="pages"><span>Pages</span><span class="check-value">—</span></li>
+              <li data-check="gaps" class="gaps"><span>Gaps, kept out</span><span class="check-value">—</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="specs reveal" aria-label="Guarantees in numbers">
+        <div class="spec"><span class="spec-value">1 page</span><span class="spec-label">Your format, fitted to A4</span></div>
+        <div class="spec"><span class="spec-value">0</span><span class="spec-label">Skills, employers or numbers invented</span></div>
+        <div class="spec"><span class="spec-value">4</span><span class="spec-label">LLM providers, local or keyed</span></div>
+        <div class="spec"><span class="spec-value">127.0.0.1</span><span class="spec-label">Server never leaves localhost</span></div>
+      </section>
+
+      <section id="how" class="section">
+        <div class="section-head reveal">
+          <span class="eyebrow">How it works</span>
+          <h2>From job posting to PDF, without leaving the tab.</h2>
+          <p>Every stage is small, checkable and yours to override.</p>
+        </div>
+
+        <ol class="pipeline">
+          <li class="stage reveal">
+            <span class="stage-num">01</span>
+            <h3>Read</h3>
+            <p>The extension pulls the job description off the page — LinkedIn, a careers site, anywhere.</p>
+          </li>
+          <li class="stage reveal">
+            <span class="stage-num">02</span>
+            <h3>Tailor</h3>
+            <p>Each section is re-ordered and re-worded toward the role, using only what your resume already says.</p>
+          </li>
+          <li class="stage reveal">
+            <span class="stage-num">03</span>
+            <h3>Verify</h3>
+            <p>Every bullet must cite its source. Uncited bullets fall back to your original; unattested terms turn red.</p>
+          </li>
+          <li class="stage reveal">
+            <span class="stage-num">04</span>
+            <h3>Fit</h3>
+            <p>A compression ladder tightens spacing until it holds one page — or tells you exactly how much to cut.</p>
+          </li>
+          <li class="stage reveal">
+            <span class="stage-num">05</span>
+            <h3>Export</h3>
+            <p>Click any line to edit it, then download a PDF rendered in the same fonts and geometry as your original.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section id="features" class="section">
+        <div class="section-head reveal">
+          <span class="eyebrow">Guarantees</span>
+          <h2>Tailored, not fabricated.</h2>
+          <p>Enforced mechanically — not by asking the model politely.</p>
+        </div>
+
+        <div class="features">
+          <article class="feature reveal">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            </div>
+            <h3>Cited, never invented</h3>
+            <p>Every rewritten bullet points at the bullet it came from. No citation, or too little overlap, and your original is restored.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+            </div>
+            <h3>Your format, to the point</h3>
+            <p>Same Latin Modern fonts, same A4 page, same margins and baselines — fitted against your PDF, not approximated.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+            </div>
+            <h3>Gaps, kept separate</h3>
+            <p>What the job wants that you don't have is listed on the side — so you decide whether to apply, not the model.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            </div>
+            <h3>Local by default</h3>
+            <p>Run fully offline with Ollama, or bring your own Gemini, OpenAI or Anthropic key. Your resume stays under your control.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="stack" class="section">
+        <div class="section-head reveal">
+          <span class="eyebrow">Stack</span>
+          <h2>Small, local, inspectable.</h2>
+        </div>
+        <ul class="stack reveal">
+          <li>Chrome MV3</li>
+          <li>Node.js</li>
+          <li>pdf.js</li>
+          <li>Latin Modern</li>
+          <li>Headless Chrome</li>
+          <li>Ollama</li>
+          <li>Qwen2.5</li>
+          <li>Gemini</li>
+          <li>OpenAI</li>
+          <li>Anthropic</li>
+        </ul>
+      </section>
+
+      <section class="cta reveal">
+        <h2>Apply with the resume you already have.</h2>
+        <p>Clone the repo, run the server, load the extension.</p>
+        <a class="btn btn-primary" href="https://github.com/thenameisvicky/fast-resume" target="_blank" rel="noopener">Get the code</a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© <span id="year"></span> fast-CV</span>
+      <span class="footer-mono">127.0.0.1:7788</span>
+    </footer>
+
+    <script src="index.js" defer></script>
+  </body>
+</html>
