@@ -1,3 +1,9 @@
+// ==========================================================================
+// Tokenly base — identical on tokenly.in, Kural and fast-CV.
+// Change it in one page, copy it to the others. Page code goes below the
+// "Page" banner at the end of this file.
+// ==========================================================================
+
 const root = document.documentElement;
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -63,16 +69,56 @@ if ("IntersectionObserver" in window && !reducedMotion) {
   revealed.forEach((el) => el.classList.add("visible"));
 }
 
+// ---------- Animated backdrop ----------
+
+// Sizes the full-viewport #bg canvas and runs the page's draw(view, now) every
+// frame, pausing while the tab is hidden. Reduced motion draws one still frame.
+function startBackdrop({ draw, resize = () => {} }) {
+  const canvas = document.getElementById("bg");
+  const view = { ctx: canvas.getContext("2d"), width: 0, height: 0 };
+
+  function fit() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    view.width = window.innerWidth;
+    view.height = window.innerHeight;
+    canvas.width = view.width * dpr;
+    canvas.height = view.height * dpr;
+    view.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    resize(view);
+  }
+
+  fit();
+  window.addEventListener("resize", () => {
+    fit();
+    if (reducedMotion) draw(view, 0);
+  });
+
+  if (reducedMotion) {
+    draw(view, 0);
+    return;
+  }
+
+  let rafId = 0;
+  const frame = (now) => {
+    draw(view, now);
+    rafId = requestAnimationFrame(frame);
+  };
+  rafId = requestAnimationFrame(frame);
+  document.addEventListener("visibilitychange", () => {
+    cancelAnimationFrame(rafId);
+    if (!document.hidden) rafId = requestAnimationFrame(frame);
+  });
+}
+
+// ==========================================================================
+// Page
+// ==========================================================================
+
 // ---------- Animated document background ----------
 
 // Faint lines of "text", like a resume page. Every so often one line is
 // re-angled: its words re-order and re-size in place, staying within ~10% of
 // the original length, and leave a small citation tick behind.
-const canvas = document.getElementById("lines");
-const ctx = canvas.getContext("2d");
-let width = 0;
-let height = 0;
-let dpr = 1;
 let rows = [];
 
 const INK_RGB = "15, 15, 20";
@@ -98,7 +144,7 @@ function makeWords(length) {
   return words;
 }
 
-function buildRows() {
+function buildRows({ width, height }) {
   const margin = width < 640 ? 16 : 32;
   const column = width - margin * 2;
   rows = [];
@@ -129,14 +175,14 @@ function rewrite(row, now) {
   row.start = now;
 }
 
-function bar(x, y, w) {
+function bar(ctx, x, y, w) {
   ctx.beginPath();
   if (ctx.roundRect) ctx.roundRect(x, y - BAR_HEIGHT / 2, w, BAR_HEIGHT, BAR_HEIGHT / 2);
   else ctx.rect(x, y - BAR_HEIGHT / 2, w, BAR_HEIGHT);
   ctx.fill();
 }
 
-function drawRow(row, now) {
+function drawRow(ctx, row, now) {
   let words = row.words;
   let progress = 1;
   if (row.from) {
@@ -156,10 +202,10 @@ function drawRow(row, now) {
   let x = row.x;
   words.forEach((w) => {
     ctx.fillStyle = `rgba(${INK_RGB}, ${0.035 * (1 - glow)})`;
-    bar(x, row.y, w);
+    bar(ctx, x, row.y, w);
     if (glow > 0) {
       ctx.fillStyle = `rgba(${ACCENT_RGB}, ${0.22 * glow})`;
-      bar(x, row.y, w);
+      bar(ctx, x, row.y, w);
     }
     x += w + WORD_GAP;
   });
@@ -173,56 +219,24 @@ function drawRow(row, now) {
     // Citation tick: the rewrite points back at its source.
     const fade = 1 - (now - row.done) / CITE_MS;
     ctx.fillStyle = `rgba(${ACCENT_RGB}, ${0.35 * fade})`;
-    bar(x + 2, row.y, 16);
+    bar(ctx, x + 2, row.y, 16);
   }
 }
 
-function drawLines(now) {
-  ctx.clearRect(0, 0, width, height);
-  rows.forEach((row) => drawRow(row, now));
-}
-
-function resize() {
-  dpr = Math.min(window.devicePixelRatio || 1, 2);
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = width * dpr;
-  canvas.height = height * dpr;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  buildRows();
-}
-
-let rafId = null;
 let nextRewrite = 0;
 
-function loop(now) {
-  if (now >= nextRewrite && rows.length) {
-    const idle = rows.filter((r) => !r.from);
-    if (idle.length) rewrite(idle[Math.floor(Math.random() * idle.length)], now);
-    nextRewrite = now + rand(500, 1100);
-  }
-  drawLines(now);
-  rafId = requestAnimationFrame(loop);
-}
-
-resize();
-window.addEventListener("resize", () => {
-  resize();
-  if (reducedMotion) drawLines(0);
-});
-
-if (reducedMotion) {
-  drawLines(0);
-} else {
-  rafId = requestAnimationFrame(loop);
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      cancelAnimationFrame(rafId);
-    } else {
-      rafId = requestAnimationFrame(loop);
+startBackdrop({
+  resize: buildRows,
+  draw({ ctx, width, height }, now) {
+    if (now && now >= nextRewrite && rows.length) {
+      const idle = rows.filter((r) => !r.from);
+      if (idle.length) rewrite(idle[Math.floor(Math.random() * idle.length)], now);
+      nextRewrite = now + rand(500, 1100);
     }
-  });
-}
+    ctx.clearRect(0, 0, width, height);
+    rows.forEach((row) => drawRow(ctx, row, now));
+  },
+});
 
 // ---------- Tailoring demo ----------
 
